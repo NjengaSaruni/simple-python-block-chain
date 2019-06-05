@@ -1,6 +1,8 @@
 from datetime import datetime
 import hashlib as hasher
 
+import unittest
+
 
 class Block:
     def __init__(self, index, timestamp, data, previous_hash):
@@ -40,17 +42,22 @@ def next_block(last_block, data=''):
     return block
 
 
-def test_code():
-    """Test creating chain of 20 blocks."""
-    blockchain = [make_genesis_block()]
-    prev_block = blockchain[0]
-    for _ in range(0, 20):
-        block = next_block(prev_block, data='some data here')
-        blockchain.append(block)
-        prev_block = block
-        print('{} added to blockchain'.format(block))
-        print('Hash: {}\n'.format(block.hash))
+class TestBlockChain(unittest.TestCase):
+
+    def test_chain(self):
+        """Test creating chain of 20 blocks."""
+        blockchain = [make_genesis_block()]
+        prev_block = blockchain[0]
+        for _ in range(0, 20):
+            block = next_block(prev_block, data='some data here')
+            blockchain.append(block)
+            prev_block = block
+            print('{} added to blockchain'.format(block))
+            print('Hash: {}\n'.format(block.hash))
+
+        # Assert that a blockchain of length 20 was created
+        self.assertTrue(len(blockchain), 20)
 
 
 if __name__ == '__main__':
-    test_code()
+    unittest.main()
